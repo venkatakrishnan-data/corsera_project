@@ -1,5 +1,7 @@
 # corsera_project
-I have did the the prediction using SVM machine learning algorith.
+#I have did the the prediction using SVM machine learning algorith.
+
+#
 getwd()
 setwd("E:")
 proo1<-read.csv("E:/Rcorsera/pml.csv")
@@ -12,8 +14,7 @@ pro1<-subset(proo1, select=c(user_name,raw_timestamp_part_1,
                                 pitch_belt,yaw_belt,total_accel_belt,gyros_belt_x,
                                 gyros_belt_y,gyros_belt_z,accel_belt_x,accel_belt_y,
                                 accel_belt_z,magnet_belt_x,magnet_belt_y,
-                             
-                             magnet_belt_z,roll_arm,pitch_arm,yaw_arm,total_accel_arm,
+                                magnet_belt_z,roll_arm,pitch_arm,yaw_arm,total_accel_arm,
                              roll_dumbbell,pitch_dumbbell,yaw_dumbbell,gyros_dumbbell_x
                              ,gyros_dumbbell_y,gyros_dumbbell_z,accel_dumbbell_x,
                              accel_dumbbell_y,accel_dumbbell_z,magnet_dumbbell_x,
