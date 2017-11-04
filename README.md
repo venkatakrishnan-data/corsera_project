@@ -2,13 +2,13 @@
 #I have did the the prediction using SVM machine learning algorith.
 
 #
-getwd()
-setwd("E:")
-proo1<-read.csv("E:/Rcorsera/pml.csv")
+#getwd()
+#setwd("E:")
+#proo1<-read.csv("E:/Rcorsera/pml.csv")
 
 
 
-pro1<-subset(proo1, select=c(user_name,raw_timestamp_part_1,
+#pro1<-subset(proo1, select=c(user_name,raw_timestamp_part_1,
                                 raw_timestamp_part_2,
                                 new_window,num_window,roll_belt,
                                 pitch_belt,yaw_belt,total_accel_belt,gyros_belt_x,
