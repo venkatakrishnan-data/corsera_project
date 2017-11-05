@@ -1,0 +1,89 @@
+---
+title: "corsera_project"
+author: "venkata krishnan"
+date: "November 5, 2017"
+output: html_document
+---
+comment:load the library and the data file 
+```{r}
+library(caret)
+library(e1071)
+getwd()
+setwd("E:")
+In1_train<-read.csv("E:/Rcorsera/pml-training.csv")
+In2_test<-read.csv("E:/Rcorsera/pml-testing.csv")
+```
+Comment:subset with the required data 
+```{r}
+data_1<-subset(In1_train, select=c(user_name,raw_timestamp_part_1,
+                             raw_timestamp_part_2,
+                             new_window,num_window,roll_belt,
+                             pitch_belt,yaw_belt,total_accel_belt,gyros_belt_x,
+                             gyros_belt_y,gyros_belt_z,accel_belt_x,accel_belt_y,
+                             accel_belt_z,magnet_belt_x,magnet_belt_y,
+                             magnet_belt_z,roll_arm,pitch_arm,yaw_arm,total_accel_arm,
+                             roll_dumbbell,pitch_dumbbell,yaw_dumbbell,gyros_dumbbell_x
+                             ,gyros_dumbbell_y,gyros_dumbbell_z,accel_dumbbell_x,
+                             accel_dumbbell_y,accel_dumbbell_z,magnet_dumbbell_x,
+                             magnet_dumbbell_y,magnet_dumbbell_z,roll_forearm,
+                             pitch_forearm,yaw_forearm,gyros_forearm_x,
+                             gyros_forearm_y,gyros_forearm_z,accel_forearm_x,
+                             accel_forearm_y,accel_forearm_z,magnet_forearm_x,
+                             magnet_forearm_y,magnet_forearm_z,
+                             classe
+))
+data_2<-subset(In2_test, select=c(user_name,raw_timestamp_part_1,
+                             raw_timestamp_part_2,
+                             new_window,num_window,roll_belt,
+                             pitch_belt,yaw_belt,total_accel_belt,gyros_belt_x,
+                             gyros_belt_y,gyros_belt_z,accel_belt_x,accel_belt_y,
+                             accel_belt_z,magnet_belt_x,magnet_belt_y,
+                             magnet_belt_z,roll_arm,pitch_arm,yaw_arm,total_accel_arm,
+                             roll_dumbbell,pitch_dumbbell,yaw_dumbbell,gyros_dumbbell_x
+                             ,gyros_dumbbell_y,gyros_dumbbell_z,accel_dumbbell_x,
+                             accel_dumbbell_y,accel_dumbbell_z,magnet_dumbbell_x,
+                             magnet_dumbbell_y,magnet_dumbbell_z,roll_forearm,
+                             pitch_forearm,yaw_forearm,gyros_forearm_x,
+                             gyros_forearm_y,gyros_forearm_z,accel_forearm_x,
+                             accel_forearm_y,accel_forearm_z,magnet_forearm_x,
+                             magnet_forearm_y,magnet_forearm_z,
+                             classe))
+```
+Comment: preparing data for the prediction. The two seperate train and test data are comined to make a single data file and then split accordingle into test and train. The reas is due to the error in svm due to cration of new column.
+```{r}
+pro1 <- rbind(data_1,data_2)
+pro1$classe<-factor(pro1$classe)
+train<-subset(pro1[1:19622,])
+test<-subset(pro1[19623:19642,])
+```
+Comment: building the model using the training data. The svm machine learning algorithm is used for the prediction.The class is the output column that has to be predicted.    
+```{r}
+svm_model <- svm(classe ~., data=train)
+summary(svm_model)
+```
+
+Comment: predincting the model on the train data.The problem here is a classification and it been mentioned to the model that we r dealing with a classification problem. and the prediction is done on the training data set. the 
+```{r}
+trained_out <-predict(svm_model,train,type="C-classification")
+table(trained_out, train$classe)
+confusionMatrix(trained_out, train$classe)
+```
+
+comment: The model which was created using the training data set and the created model is used on the testing data set to comduct the prediction of the output. The out is then written to a csv file in the local disk.
+```{r}
+tested_out <-predict(svm_model,test,type="C-classification")
+write.csv(tested_out,"my_output.csv")
+```
+comment: the cross validation is done using the 5 folds and the out is been generated.
+
+trctrl <- trainControl(method = "repeatedcv", number = 5, repeats = 2)
+set.seed(3233)
+table(train$classe)
+train<-train[,-1]
+head(train)
+svm_Linear <- train(train$classe~.,train, method = "svmLinear",
+                    trControl=trctrl,
+                    preProcess = c("center", "scale"),
+                    tuneLength = 10)
+
+
